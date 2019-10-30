@@ -1,0 +1,23 @@
+
+    <div class="card">
+      <div class="imgDiv">
+        <img src={{gotData.sprites.front_default}} class="img-fluid" class="card-img-top"><br>
+        <h1>{{gotData.name}}</h1><br>
+      </div>
+
+      <div class="cardBody">
+        <h4>Abilities</h4>
+        <ul>
+          <li>Ability 1: {{gotData.abilities[0].ability.name}}</li>
+          <li>Ability 2: {{gotData.abilities[1].ability.name}}</li>
+        </ul><br>
+
+        <h4>Moves</h4>
+        <ul>
+          <li>{{gotData.moves[0].move.name}}</li>
+          <li>{{gotData.moves[1].move.name}}</li>
+          <li>{{gotData.moves[2].move.name}}</li>
+          <li>{{gotData.moves[3].move.name}}</li>
+        </ul>
+      </div>
+  </div>
