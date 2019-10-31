@@ -12,9 +12,7 @@ export class MapComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-
   getMap() {
-    
     /* Getting the pokemon object from the pokemon api. */
     /* Pokemon id's */
     /* 
@@ -32,13 +30,13 @@ export class MapComponent implements OnInit {
 
   
     /* Global class varibles. */
+    let pokemonArray = [];
     let pokemonID = 59;
     let url = 'https://pokeapi.co/api/v2/pokemon/';
     let gotData = null;
     let pokeImgUrl = "./assets/pokeball.png";
-  
-    /* let pokemonImg = '<img src={{gotData.sprites.front_default}} class="img-fluid" class="card-img-top"><br>'; */
-    /* let pokemonName = this.gotData.name; */
+    let pokemonIMG = "";
+    
 
     
 
@@ -46,7 +44,7 @@ export class MapComponent implements OnInit {
       iconUrl: pokeImgUrl, 
       /* shadowUrl: 'leaf-shadow.png',  */   /* This is a shadow image that creates a shadow effect for the icon. */
     
-      iconSize:     [50, 50], // size of the icon
+      iconSize:     [30, 30], // size of the icon
       shadowSize:   [50, 64], // size of the shadow
       iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
       shadowAnchor: [4, 62],  // the same for the shadow
@@ -55,7 +53,7 @@ export class MapComponent implements OnInit {
 
 
     /* Setting up the leaflet map and the icon on the map. */
-    var mymap = leaflet.map('mapID').setView([59.329324, 18.068581], 13);
+    var mymap = leaflet.map('mapID').setView([56.8787183, 14.8094385], 13);
   
     leaflet.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -64,30 +62,51 @@ export class MapComponent implements OnInit {
       accessToken: 'pk.eyJ1Ijoib2FrbGFuZGVyIiwiYSI6ImNrMjFpZzQ2MzE5bXkzbW12Z3d0YmE4MHUifQ.seUiXfpT77ZJjCL4Isu-iw'
     }).addTo(mymap);
 
-    /* Test icon for sweden. */
-    /* leaflet.marker([59.329324, 18.068581], {icon: pokeBallIcon}).addTo(mymap).bindPopup("SWEDEN!!"); */
 
+    /* Here are all the cities with all the markers. */
+
+    /* Växjö is the start location. */
+    /* 56.8787183, 14.8094385 */
+
+    /* London. */
+    /* leaflet.marker([51.5073219, -0.1276474], {icon: pokeBallIcon}).addTo(mymap).bindPopup("London"); */
+
+    return this.http.get(url + pokemonID).subscribe( data => {
+      gotData = data; 
+      /* console.log(gotData); */
+      
+      /* Get the pokemon image. */
+      let pokemonIMG = gotData.sprites.front_default; 
+    
+      /* When i got the pokemon data i put it inside the leaflet popup function. */
+    
+      /* Växjö */
+       leaflet.marker([56.8787183, 14.8094385], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
+        '<img src=' + pokemonIMG + ' class="img-fluid" />' + 
+        '<br>' + 
+        "<h1>" + gotData.name + "</h1>" +
+        '<br>' +
+        "<h3 classname='abilityTitle'>" + "Ability 1:" +  gotData.abilities[0].ability.name + "</h3>" + '<br>' +
+        "<h3 classname='abilityTitle'>" + "Ability 2:" +  gotData.abilities[1].ability.name + "</h3>" + '<br>' +
+        "<h3 classname='abilityTitle'>" + "Ability 3:" +  gotData.abilities[2].ability.name + "</h3>" + '<br>'
+      ); 
+    
+      /* London */
+      leaflet.marker([51.5073219, -0.1276474], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
+        '<img src=' + pokemonIMG + ' class="img-fluid" />' + 
+        '<br>' + 
+        "<h1>" + gotData.name + "</h1>" +
+        '<br>' +
+        "<h3 classname='abilityTitle'>" + "Ability 1:" +  gotData.abilities[0].ability.name + "</h3>" + '<br>' +
+        "<h3 classname='abilityTitle'>" + "Ability 2:" +  gotData.abilities[1].ability.name + "</h3>" + '<br>' +
+        "<h3 classname='abilityTitle'>" + "Ability 3:" +  gotData.abilities[2].ability.name + "</h3>" + '<br>'
+      );
+     
+    })
     
 
 
-
-
-    return this.http.get(url + pokemonID).subscribe( data => {
-      gotData = data;
-      /* console.log(gotData); */
-
-      let pokemonIMG = gotData.sprites.front_default;
-
-      /* When i got the pokemon data i put it inside the leaflet popup function. */
-      leaflet.marker([51.495, -0.083], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
-        '<img src=' + pokemonIMG + ' class="img-fluid" />' + '<br>' + gotData.name + '<br>' 
-      );
-      
-    })
-
   };
-
-
 
 
   ngOnInit() {
@@ -95,7 +114,31 @@ export class MapComponent implements OnInit {
   }
 
 
-
-
-
 }
+/* SAVE THIS CODE!!! */
+
+/* let bulbasaurID = 1;
+    this.http.get(url + bulbasaurID).subscribe( data => {
+      gotData = data;
+      pokemonArray.push(gotData);
+      console.log("balbasaur");
+    })
+
+    let arcanineID = 59;
+    this.http.get(url + arcanineID).subscribe( data => {
+      gotData = data;
+      pokemonArray.push(gotData);
+      console.log("Archanie");
+    })
+
+    let MankeyID = 56;
+    this.http.get(url + MankeyID).subscribe( data => {
+      gotData = data;
+      pokemonArray.push(gotData);
+      console.log("Mankey");
+    }) 
+*/
+
+
+/* let pokemonImg = '<img src={{gotData.sprites.front_default}} class="img-fluid" class="card-img-top"><br>'; */
+    /* let pokemonName = this.gotData.name; */

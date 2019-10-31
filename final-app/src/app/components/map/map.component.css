@@ -5,3 +5,7 @@
 
     margin: 5%;
 }
+/* Styling for the abilites titles */
+.abilityTitle {
+    font-size: 10px !important;
+}
