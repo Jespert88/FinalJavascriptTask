@@ -1,3 +1,29 @@
 
-.titleContainer { text-align: center; }
-#imgTitle { height: 100px; width: auto;}
+
+/* Desktop CSS */
+.titleContainer { 
+    text-align: center;
+    margin-top: 20px; 
+}
+
+#imgTitle { height: 60px; width: auto;}
+
+
+/* Mobile */
+@media (min-width: 360px) and (max-width: 600px) {
+    .titleContainer { 
+        text-align: center;
+        margin-top: 5%; 
+    }
+    
+    #imgTitle { height: 100px; width: auto;}
+} 
+    
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .titleContainer { 
+        text-align: center;
+        margin-top: 10%; 
+    }
+    #imgTitle { height: 100px; width: auto;}
+} 
