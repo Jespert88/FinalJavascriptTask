@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import leaflet from 'leaflet';
 import { getRandomString } from 'selenium-webdriver/safari';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -13,6 +14,8 @@ export class MapComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   getMap() {
+
+
     /* Getting the pokemon object from the pokemon api. */
     /* Pokemon id's */
     /* 
@@ -36,19 +39,16 @@ export class MapComponent implements OnInit {
     let gotData = null;
     let pokeImgUrl = "./assets/pokeball.png";
     let pokemonIMG = "";
-    
 
-    
 
     var pokeBallIcon = leaflet.icon({
       iconUrl: pokeImgUrl, 
       /* shadowUrl: 'leaf-shadow.png',  */   /* This is a shadow image that creates a shadow effect for the icon. */
-    
       iconSize:     [30, 30], // size of the icon
       shadowSize:   [50, 64], // size of the shadow
-      iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+      iconAnchor:   [5, 30], // point of the icon which will correspond to marker's location
       shadowAnchor: [4, 62],  // the same for the shadow
-      popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor */
+      popupAnchor:  [-3, -30] // point from which the popup should open relative to the iconAnchor */
     });
 
 
@@ -63,82 +63,81 @@ export class MapComponent implements OnInit {
     }).addTo(mymap);
 
 
-    /* Here are all the cities with all the markers. */
 
-    /* Växjö is the start location. */
-    /* 56.8787183, 14.8094385 */
 
-    /* London. */
-    /* leaflet.marker([51.5073219, -0.1276474], {icon: pokeBallIcon}).addTo(mymap).bindPopup("London"); */
+    /* 
+      Here i got help, so the problem was that everything was running at the same time and the browser got confused
+      where to display the data and didn't run the last function. So this solution was to put every get method in a toPromise with ".then".
 
-    return this.http.get(url + pokemonID).subscribe( data => {
-      gotData = data; 
-      /* console.log(gotData); */
+      And when i have the data i put that data inside the leaflet marker.
+    */
+
+      this.http.get(url + pokemonID).toPromise()
+      .then( (data) => {
+        gotData = data;
+        let pokemonImg = gotData.sprites.front_default;
+        pokemonArray.push(gotData);
+
+        /* Växjö */
+        leaflet.marker([56.878718, 14.809439], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
+          '<img src=' + pokemonImg + ' class="img-fluid" />' + "<br>" +
+          gotData.name
+        )
+      })
+      .then( () => {
+          let HaunterID = 93;
+        this.http.get(url + HaunterID).toPromise()
+        .then( (data) => {
+          gotData = data;
+          let pokemonImg = gotData.sprites.front_default;
+          pokemonArray.push(gotData);
+
+          /* London */
+          leaflet.marker([51.5073219, 0.1276474], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
+            '<img src=' + pokemonImg + ' class="img-fluid" />' + "<br>" +
+            gotData.name
+          )
+        }) 
+      })
+      .then(() => {
+        let CharizardID = 6;
+        this.http.get(url + CharizardID).toPromise()
+        .then( (data) => {
+          gotData = data;
+          let pokemonImg = gotData.sprites.front_default;
+          pokemonArray.push(gotData);
+ 
+          /* Norway */
+         leaflet.marker([59.91333, 10.73897], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
+            '<img src=' + pokemonImg + ' class="img-fluid" />' + "<br>" +
+            gotData.name
+          )
+        })
+      }) 
+     .then(() => {
+        let MankeyID = 56;
+        this.http.get(url + MankeyID).toPromise()
+        .then( (data) => {
+          gotData = data;
+          let pokemonImg = gotData.sprites.front_default;
+          pokemonArray.push(gotData); 
+  
+          /* Finland */
+          leaflet.marker([60.16741, 24.942577], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
+            '<img src=' + pokemonImg + ' class="img-fluid" />' + "<br>" +
+            gotData.name
+          )
+        })
+      }) 
+
+      .then( () => {
+        console.log(pokemonArray);
+      })
       
-      /* Get the pokemon image. */
-      let pokemonIMG = gotData.sprites.front_default; 
-    
-      /* When i got the pokemon data i put it inside the leaflet popup function. */
-    
-      /* Växjö */
-       leaflet.marker([56.8787183, 14.8094385], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
-        '<img src=' + pokemonIMG + ' class="img-fluid" />' + 
-        '<br>' + 
-        "<h1>" + gotData.name + "</h1>" +
-        '<br>' +
-        "<h3 classname='abilityTitle'>" + "Ability 1:" +  gotData.abilities[0].ability.name + "</h3>" + '<br>' +
-        "<h3 classname='abilityTitle'>" + "Ability 2:" +  gotData.abilities[1].ability.name + "</h3>" + '<br>' +
-        "<h3 classname='abilityTitle'>" + "Ability 3:" +  gotData.abilities[2].ability.name + "</h3>" + '<br>'
-      ); 
-    
-      /* London */
-      leaflet.marker([51.5073219, -0.1276474], {icon: pokeBallIcon}).addTo(mymap).bindPopup(
-        '<img src=' + pokemonIMG + ' class="img-fluid" />' + 
-        '<br>' + 
-        "<h1>" + gotData.name + "</h1>" +
-        '<br>' +
-        "<h3 classname='abilityTitle'>" + "Ability 1:" +  gotData.abilities[0].ability.name + "</h3>" + '<br>' +
-        "<h3 classname='abilityTitle'>" + "Ability 2:" +  gotData.abilities[1].ability.name + "</h3>" + '<br>' +
-        "<h3 classname='abilityTitle'>" + "Ability 3:" +  gotData.abilities[2].ability.name + "</h3>" + '<br>'
-      );
-     
-    })
-    
-
-
-  };
+ }
 
 
   ngOnInit() {
     this.getMap();
   }
-
-
-}
-/* SAVE THIS CODE!!! */
-
-/* let bulbasaurID = 1;
-    this.http.get(url + bulbasaurID).subscribe( data => {
-      gotData = data;
-      pokemonArray.push(gotData);
-      console.log("balbasaur");
-    })
-
-    let arcanineID = 59;
-    this.http.get(url + arcanineID).subscribe( data => {
-      gotData = data;
-      pokemonArray.push(gotData);
-      console.log("Archanie");
-    })
-
-    let MankeyID = 56;
-    this.http.get(url + MankeyID).subscribe( data => {
-      gotData = data;
-      pokemonArray.push(gotData);
-      console.log("Mankey");
-    }) 
-*/
-
-
-/* let pokemonImg = '<img src={{gotData.sprites.front_default}} class="img-fluid" class="card-img-top"><br>'; */
-    /* let pokemonName = this.gotData.name; */
+};
