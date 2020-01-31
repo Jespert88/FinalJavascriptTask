@@ -1,10 +1,5 @@
-# FinalJavascriptTask
+# Angular.js  version: 8
 
-# Angular 8
+This was a task on experis Academy.
 
-This is an individual and/or pair task. If you work in pairs there must be a GOOD division of responsibility, you must also motivate the decision to work as pair.
-
-Use one of the three frameworks that we have discussed: 
-React
-Vue
-Angular
+The exercise is done individually or in pairs. If the exercise is done in pairs, it should be clearly shown the division of work as well as a good explanation of why you chose to work in pairs.
